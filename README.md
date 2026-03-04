@@ -4,6 +4,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-3-blue?logo=sqlite&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-0.2+-green?logo=chainlink&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.35+-red?logo=streamlit&logoColor=white)
+![CI](https://github.com/Abhinav15s/ai-bi-copilot/actions/workflows/ci.yml/badge.svg)
 
 ## Executive Summary
 
@@ -49,11 +50,16 @@ graph TD
 | Sentiment Analysis | VADER (vaderSentiment) |
 | GenAI / NL-to-SQL | LangChain, LangChain-Groq, Groq LLM |
 | Dashboard | Streamlit + Plotly |
+| Testing | pytest + pytest-cov |
+| Linting | ruff |
+| CI/CD | GitHub Actions |
 | Notebooks | Jupyter / ipykernel |
 
 ---
 
 ## Quick Start
+
+### Option A — Local Python
 
 ```bash
 # 1. Clone the repository
@@ -66,6 +72,7 @@ pip install -r requirements.txt
 # 3. Add your Groq API key
 cp .env.example .env
 # Edit .env and replace "your-groq-api-key-here" with your actual key
+# Get a free key at https://console.groq.com
 
 # 4. Generate synthetic data
 python data/generate_data.py
@@ -75,6 +82,16 @@ streamlit run dashboard/app.py
 ```
 
 The dashboard will open at `http://localhost:8501`.
+
+### Option B — Docker
+
+```bash
+# Build the image (synthetic data is generated inside the image)
+docker build -t ai-bi-copilot .
+
+# Run with your Groq API key
+docker run -p 8501:8501 -e GROQ_API_KEY=your-key-here ai-bi-copilot
+```
 
 ### Health Check
 
@@ -107,6 +124,9 @@ ai-bi-copilot/
 ├── requirements.txt                 # Python dependencies
 ├── .env.example                     # Environment variable template
 ├── .gitignore
+├── Dockerfile                       # Docker image definition
+├── .dockerignore
+├── ruff.toml                        # Linter configuration
 ├── data/
 │   └── generate_data.py             # Synthetic data generator (Faker)
 ├── sql/
@@ -122,9 +142,38 @@ ai-bi-copilot/
 │   └── app.py                       # Streamlit multi-page dashboard
 ├── scripts/
 │   └── health_check.py              # Local setup verification script
+├── tests/
+│   ├── conftest.py                  # Shared pytest fixtures
+│   ├── test_sentiment_engine.py     # Sentiment engine unit tests
+│   ├── test_process_mining.py       # Process mining unit tests
+│   ├── test_genai_query.py          # GenAI query layer tests (offline)
+│   └── test_db.py                   # Database helper tests
+├── .github/
+│   └── workflows/
+│       └── ci.yml                   # GitHub Actions CI workflow
 └── notebooks/
     └── exploration.ipynb            # EDA walkthrough
 ```
+
+---
+
+## Contributing
+
+```bash
+# Install all dependencies (including dev tools)
+pip install -r requirements.txt
+
+# Run linter
+ruff check .
+
+# Run tests
+pytest tests/ -v --cov=modules --cov-report=term-missing
+
+# Auto-fix lint issues
+ruff check . --fix
+```
+
+All PRs must pass CI (lint + tests on Python 3.11 and 3.12) before merging.
 
 ---
 
@@ -134,6 +183,12 @@ ai-bi-copilot/
 - **Month 1**: Deploy to Streamlit Cloud with secrets management; add user authentication
 - **Month 2**: Integrate with real CRM/ERP data sources via REST APIs; add BPMN diagram export
 - **Month 3**: Fine-tune a domain-specific LLM for more accurate SQL generation; add forecasting with Prophet
+
+---
+
+## License
+
+MIT © [Abhinav15s](https://github.com/Abhinav15s)
 
 ---
 

@@ -30,6 +30,15 @@ import re
 
 _DB_PATH = Path(__file__).parent.parent / "data" / "business_data.db"
 
+_chain_cache = None  # module-level cache: stores the built LangChain chain or None
+
+
+def _get_chain():
+    global _chain_cache
+    if _chain_cache is None:
+        _chain_cache = _build_chain()
+    return _chain_cache
+
 
 def _extract_sql_query(raw_query: str) -> str:
     query = (raw_query or "").strip()
@@ -63,7 +72,7 @@ def _build_chain():
     try:
         from langchain_community.utilities import SQLDatabase
         from langchain_groq import ChatGroq
-        from langchain_classic.chains.sql_database.query import create_sql_query_chain
+        from langchain.chains import create_sql_query_chain
         from langchain_community.tools import QuerySQLDatabaseTool
         from langchain_core.output_parsers import StrOutputParser
         from langchain_core.prompts import PromptTemplate
@@ -118,7 +127,7 @@ def ask_question(question: str) -> str:
         A natural language answer, or an error message when the chain cannot
         be initialised.
     """
-    chain = _build_chain()
+    chain = _get_chain()
     if chain is None:
         return (
             "⚠️  The AI query layer is unavailable.  "
