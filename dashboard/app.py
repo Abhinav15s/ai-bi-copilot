@@ -23,9 +23,9 @@ if str(ROOT) not in sys.path:
 
 from modules.db import run_query
 from modules.process_mining import (
+    SLA_MINUTES,
     calculate_cycle_times,
     detect_bottlenecks,
-    get_process_summary,
     load_event_log,
 )
 from modules.sentiment_engine import analyze_reviews_df, get_sentiment_summary
@@ -51,7 +51,14 @@ def load_process_data():
     df, _ = load_event_log()
     cycle = calculate_cycle_times(df)
     bottlenecks = detect_bottlenecks(df)
-    summary = get_process_summary(df)
+    summary = {
+        "avg_cycle_time_minutes": round(cycle["total_cycle_time_minutes"].mean(), 2),
+        "median_cycle_time_minutes": round(cycle["total_cycle_time_minutes"].median(), 2),
+        "slowest_activity": bottlenecks.iloc[0]["activity"] if len(bottlenecks) > 0 else "N/A",
+        "pct_cases_over_sla": round(
+            (cycle["total_cycle_time_minutes"] > SLA_MINUTES).sum() / len(cycle) * 100, 2
+        ),
+    }
     return df, cycle, bottlenecks, summary
 
 

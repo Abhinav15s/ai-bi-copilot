@@ -1,0 +1,11 @@
+[lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]  # line too long — handled by formatter
+
+[lint.per-file-ignores]
+"tests/*" = ["S101"]  # assert statements are fine in tests
+"data/generate_data.py" = ["S311"]  # random is fine for synthetic data
+
+[format]
+quote-style = "double"
+indent-style = "space"

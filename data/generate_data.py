@@ -15,7 +15,6 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 from faker import Faker
-from sqlalchemy import text
 
 # ---------------------------------------------------------------------------
 # Configuration

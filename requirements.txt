@@ -4,6 +4,7 @@ numpy>=1.24
 faker>=19.0
 vaderSentiment>=3.3.2
 langchain>=0.2
+langchain-core>=0.2
 langchain-groq>=0.2
 langchain-community>=0.2
 streamlit>=1.35
@@ -14,3 +15,8 @@ pm4py>=2.7
 python-dotenv>=1.0
 ipykernel>=6.29
 notebook>=7.0
+
+# Development / testing
+pytest>=8.0
+pytest-cov>=5.0
+ruff>=0.4
