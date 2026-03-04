@@ -76,6 +76,16 @@ streamlit run dashboard/app.py
 
 The dashboard will open at `http://localhost:8501`.
 
+### Health Check
+
+```bash
+# Quick local setup verification
+python scripts/health_check.py
+
+# Includes a minimal live Groq NL-to-SQL call
+python scripts/health_check.py --live
+```
+
 ---
 
 ## Sample Questions (Ask the Copilot)
@@ -110,6 +120,8 @@ ai-bi-copilot/
 │   └── genai_query.py               # LangChain NL-to-SQL layer
 ├── dashboard/
 │   └── app.py                       # Streamlit multi-page dashboard
+├── scripts/
+│   └── health_check.py              # Local setup verification script
 └── notebooks/
     └── exploration.ipynb            # EDA walkthrough
 ```
